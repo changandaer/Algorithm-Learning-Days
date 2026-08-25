@@ -1,0 +1,6 @@
+匿名岗位A：使用Python和PyTorch开发模型，需要理解Transformer并能在Linux环境调试。
+匿名岗位B：使用Python或C++开发训练系统，需要熟悉Git、GPU训练和性能分析。
+匿名岗位C：负责大模型训练框架，需要掌握PyTorch、分布式训练、DDP和检查点恢复。
+匿名岗位D：负责模型推理服务，需要Python或C++、Linux、接口开发和性能评测。
+匿名岗位E：负责终端AI应用，需要Python、数据处理、Transformer和良好的技术表达。
+
