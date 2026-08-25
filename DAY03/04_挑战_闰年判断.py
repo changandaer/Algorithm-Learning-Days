@@ -1,10 +1,17 @@
 """DAY03选做挑战：根据整除规则判断闰年。"""
 
-# TODO 1：读取年份并转换为整数。
+year = int(input("输入年份："))
 
-# TODO 2：严格按照400、100、4的顺序判断。
+if year % 400 == 0:
+    is_leap_year = True
+elif year % 100 == 0:
+    is_leap_year = False
+elif year % 4 == 0:
+    is_leap_year = True
+else:
+    is_leap_year = False
 
-# TODO 3：输出“闰年”或“不是闰年”。
-
-# TODO 4：测试2000、1900、2024、2023。
-
+if is_leap_year:
+    print(f"{year}是闰年")
+else:
+    print(f"{year}不是闰年")
