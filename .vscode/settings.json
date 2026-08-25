@@ -1,0 +1,12 @@
+{
+    "editor.fontSize": 16,
+    "markdown.preview.fontSize": 16,
+    "terminal.integrated.fontSize": 16,
+    "files.exclude": {
+        "**/.venv": true,
+        "**/Algorithm": true,
+        "**/__pycache__": true,
+        "**/.DS_Store": true
+    }
+}
+
