@@ -10,6 +10,6 @@ second_number = -5
 if first_number > second_number:
     print(f"较大的数是：{first_number}")
 elif first_number < second_number:
-    print(f"较大的数是"{second_number})
+    print(f"较大的数是：{second_number}")
 else:
     print("两个数相等")
