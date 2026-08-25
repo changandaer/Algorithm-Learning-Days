@@ -13,3 +13,10 @@ elif first_number < second_number:
     print(f"较大的数是：{second_number}")
 else:
     print("两个数相等")
+
+# 1. = 和 == 的区别：……
+#   =是将数值赋值给变量 和 ==是询问变量是否等于变量，返回 True或False
+# 2. elif 在什么情况下检查：
+#   elif在情况多于两种的时候，if，else只能表示两种判断关系
+# 3. 为什么必须测试 5 和 5：
+#   因为数值相等这种可能性是存在的
