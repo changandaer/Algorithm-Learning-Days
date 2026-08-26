@@ -11,3 +11,22 @@
 
 # TODO 4：计算平均值，输出列表和三项统计。
 
+loss = []
+sum = 0
+for num in range(5):
+
+    loss.append(input(f"输入第{num+1}个真实损失："))
+    sum += float(loss[num])
+
+current_min = float(loss[0])
+current_max = float(loss[0])
+
+for index in range(1,len(loss)):
+    if float(loss[index]) > current_max:
+        current_max = float(loss[index])
+    elif float(loss[index]) < current_min:
+        current_min = float(loss[index])
+
+print(f"最低损失为{current_min}，最高损失为{current_max}，平均损失为{sum/len(loss)}")
+    
+
