@@ -6,15 +6,37 @@
 
 core_skills = ["python", "c++", "pytorch", "linux", "git"]
 
-# TODO 1：建立空的 collected_skills。
+collected_skills = []
+no_skills = []
+num_skills = 0
 
-# TODO 2：反复读取并标准化技能；输入“结束”时停止。
+is_end = True
 
-# TODO 3：分别处理空输入、重复技能和新技能。
+while is_end:
 
-# TODO 4：带编号输出已收集技能与总数。
+    skill = input("请输入你的技能：").strip().lower()
 
-# TODO 5：找出并输出尚未收集的核心技能。
+    if skill == '':
+        print("输入为空，请重新输入")
+    elif skill in collected_skills:
+        print("该技能已存在，请重新输入")
+    elif skill == '结束':
+        is_end = False
+    else:
+        collected_skills.append(skill)
+        num_skills += 1
+        print(f"这是第{num_skills}项技能")
 
-# TODO 6：运行课程中的规定输入，再自行设计一组测试。
+for index in range(len(core_skills)):
+    if core_skills[index] in collected_skills:
+        pass
+    else:
+        no_skills.append(core_skills[index])
+
+for index in range(len(collected_skills)):
+    print(f"这是第{index+1}项技能{collected_skills[index]}")
+
+print(f"目前你一共有{num_skills}项技能，但是还没有收集到{no_skills}这些核心技能")
+
+
 
