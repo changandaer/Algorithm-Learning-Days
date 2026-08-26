@@ -11,3 +11,21 @@
 
 # TODO 4：分别测试 Git、PYTHON 和三个空格。
 
+skills = [ "python", "Linux" ]
+new_skill = input("输入一项新技能：").strip().lower()
+
+if new_skill == "":
+    print("输入技能为空")
+elif new_skill in skills:
+    print("该技能已经存在")
+else:
+    skills.append(new_skill)
+
+for index in range(len(skills)):
+
+    print(f"第{index+1}项技能是{skills[index]}")
+
+print(f"一共有{len(skills)}项技能")
+
+# Git、PYTHON 和三个空格 都已经测试通过
+# 但是由于lower()的存在，必须让 skills 列表中的技能都是小写字母。
