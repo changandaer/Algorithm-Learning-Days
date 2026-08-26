@@ -4,15 +4,23 @@
 """
 
 numbers = [2, 7, 11, 15]
-target = 9
+target = 26
 
-# TODO 1：建立是否找到结果的状态。
+is_find = False
+finish_find = False 
 
-# TODO 2：使用两层循环枚举不重复的两个位置。
+while not finish_find:
+    for i in range(len(numbers)):
+        for j in range(len(numbers)):
+        
+            if int(numbers[i]) + int(numbers[j]) == target:
+                a,b = i,j
+                is_find = True
+                finish_find = True  # 在第一次找到之后如何立刻结束寻找是我没有搞懂的地方，所以我只能想出来这个笨办法？
+                break
+    finish_find = True        
 
-# TODO 3：相加等于目标时，输出数字和索引并停止搜索。
-
-# TODO 4：全部检查后仍未找到，输出提示。
-
-# TODO 5：分别测试目标 9、26、100，并说明大致工作量。
-
+if is_find:
+    print(f"找到了两个数满足两数之和等于{target}，分别是{numbers[a]}和{numbers[b]}")
+else:
+    print("没有符合条件的两个数")
