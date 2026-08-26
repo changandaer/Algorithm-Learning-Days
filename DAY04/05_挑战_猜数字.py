@@ -5,11 +5,17 @@
 
 secret_number = 37
 
-# TODO 1：建立尝试次数计数器。
+guess_num = int(input("请猜测固定数字是多少："))
+num_guesses = 1
 
-# TODO 2：使用循环反复读取猜测，每次让计数器加一。
 
-# TODO 3：分别处理猜大、猜小和猜中。
+while guess_num != secret_number:
 
-# TODO 4：猜中时输出次数并结束循环。
+    if guess_num > secret_number:
+        guess_num = int(input("太大，继续猜测固定数字是多少："))
+        num_guesses += 1
+    else:
+        guess_num = int(input("太小，继续猜测固定数字是多少："))
+        num_guesses += 1
 
+print(f"猜中了，共尝试{num_guesses}次")
