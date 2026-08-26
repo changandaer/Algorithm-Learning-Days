@@ -4,11 +4,19 @@
 完成后在文件底部写一条与模板不同或曾经遗漏的地方。
 """
 
-# TODO 1：读取成绩。
+score = int(input("输入你的成绩："))
 
-# TODO 2：非法时反复读取，确保循环条件能够发生变化。
+while score < 0 or score > 100:
 
-# TODO 3：合法后输出 A、B、C 或 D。
+    score = int(input("非法成绩，重新输入你的成绩："))
 
-# TODO 4：记录闭卷实现与参考模板的一处差异。
+if score >= 90:
+    print("A")
+elif score >= 80:
+    print("B")
+elif score >=60:
+    print("C")
+else:
+    print("D")
 
+# 刚开始将 判断输出 写在了 while 里面，导致了死循环，也是第一次遇到，给自己一个警示
