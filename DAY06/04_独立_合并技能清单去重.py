@@ -4,7 +4,8 @@
 """
 
 first_skills = ["Python", "Linux", "Git"]
-second_skills = ["python", "PyTorch", "Docker", "git"]
+# second_skills = ["python", "PyTorch", "Docker", "git"]
+second_skills = ["python", "Linux", "git"]
 
 # 我的拆题
 # 输入：容器为列表，元素为字符串
@@ -17,4 +18,28 @@ second_skills = ["python", "PyTorch", "Docker", "git"]
 
 
 # 从这里开始独立实现。
+
+is_has = False
+lower_first_skills = []
+lower_second_skills = []
+len_first_skills = len(first_skills)
+len_second_skills = len(second_skills)
+
+for i in range(len(first_skills)):
+    lower_first_skills.append(first_skills[i].lower())
+for j in range(len(second_skills)):
+    lower_second_skills.append(second_skills[j].lower() ) 
+
+for index in range(len(lower_second_skills)):
+    if lower_second_skills[index] in lower_first_skills:
+        pass
+    else:
+        lower_first_skills.append(lower_second_skills[index])
+        is_has = True
+
+if is_has:
+    print(f"去重前总项数是{len_first_skills+len_second_skills}项，去重之后的项数是{len(lower_first_skills)}，技能有{lower_first_skills}")
+else:
+    print(f"没有新加入的技能，依旧只有{lower_first_skills}这{len(lower_first_skills)}项技能")
+        
 
