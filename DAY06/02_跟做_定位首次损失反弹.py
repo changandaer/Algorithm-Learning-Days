@@ -3,7 +3,8 @@
 先独立填写拆题纸，再按课程 Markdown 分段手敲。
 """
 
-losses = [1.0, 1.0, 1.0, 0.8, 0.6, 0.7, 0.5]
+# losses = [1.0, 1.0, 1.0, 0.8, 0.6, 0.7, 0.5]
+losses = [1.0, 1.0, 1.0, 0.8, 0.6, 0.6]
 
 # 我的拆题
 # 输入：容器为列表，元素为浮点数
@@ -14,16 +15,22 @@ losses = [1.0, 1.0, 1.0, 0.8, 0.6, 0.7, 0.5]
 # 如果 第 i+1 个元素 小于 第 i 个元素，继续后续对比，直至最后一个元素
 
 # 最小样例的手算过程：
-# 必须记住的状态：第一次变大的位置
+# 必须记住的状态：第一次变大的位置，是否存在反弹
 # 重复动作与控制结构：
 # 普通测试、边界测试、反例：
 
 
 # 从这里开始实现。完成后替换 losses 测试无反弹和立即反弹。
 
-for index in range(len(losses)):
+is_bound = False
+for index in range(len(losses)-1):
     if losses[index+1] > losses[index]:
-        print(f'训练损失第一次比前一轮升高的位置是第{index+2}次损失')
+        # print(f'训练损失第一次比前一轮升高的位置是第{index+2}次损失')
+        is_bound = True
         break
     else:
         pass
+if is_bound:
+    print(f'训练损失第一次比前一轮升高的位置是第{index+2}次损失')
+else:
+    print(f"损失没有反弹")
