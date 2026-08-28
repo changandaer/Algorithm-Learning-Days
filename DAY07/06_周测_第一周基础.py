@@ -14,10 +14,24 @@ target = 9
 
 
 # 问题一从这里开始：
+lower_skills = []
+normal_skills = []
+for raw_skill in raw_skills:
+    lower_skills.append(raw_skill.lower())
+for normal_skill in lower_skills:
+    if normal_skill in normal_skills:
+        pass
+    else:
+        normal_skills.append(normal_skill)
 
-
+print(normal_skills)
 # 问题二的三行拆题卡：
 
 
 # 问题二从这里开始：
+for first_index in range(len(numbers)):
+    for second_index in range(first_index+1,len(numbers)):
+        if numbers[first_index] + numbers[second_index] == target:
+            print(f"索引为{first_index}与索引为{second_index}的和为目标值{target}")
+            break
 
