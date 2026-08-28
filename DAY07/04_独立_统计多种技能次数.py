@@ -11,9 +11,18 @@ all_skills = [
 unique_skills = ["python", "linux", "git", "pytorch", "c++", "docker"]
 
 # 最小样例：先只统计 python。
-# 处理阶段：
-# 必须记住的状态：
+# 处理阶段：双重遍历 unique_skills 与 all_skills，分别统计 unique_skills 中每个元素出现的次数
+# 必须记住的状态：每个技能出现的次数count以及skills_counts这个计数列表
 
 
 # 从这里开始实现，最终建立 skill_counts 并逐项输出。
+count = 0
+skill_counts = []
 
+for unique_skill in unique_skills:
+    for all_skill in all_skills:
+        if unique_skill == all_skill:
+            count += 1
+    skill_counts.append(count)
+    count = 0
+print(skill_counts)
