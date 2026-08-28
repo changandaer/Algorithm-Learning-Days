@@ -4,11 +4,11 @@
 """
 
 numbers = [2, 7, 11, 15]
-target = 14
+target = 26
 found = False
 
 for first_index in range(len(numbers)):
-    for second_index in range(1, len(numbers)):
+    for second_index in range(first_index+1, len(numbers)):
         if numbers[first_index] + numbers[second_index] == target:
             found = True
             break
