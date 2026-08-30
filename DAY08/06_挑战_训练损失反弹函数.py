@@ -18,6 +18,7 @@ def find_first_rebound_index(losses):
         for loss_index in range(len(losses)-1):
             if losses[loss_index+1] > losses[loss_index]:
                 return loss_index+1
+                print("判断return是否能让函数停止")
         return -1
 
 
