@@ -5,13 +5,23 @@
 
 # 函数合同
 # 函数名：normalize_and_deduplicate
-# 参数：
-# 返回值及类型：
-# 最小例子：
+# 参数：skills列表
+# 返回值及类型：返回列表
+# 最小例子：["Python", "Linux", "Git","python", "Linux", "git"] -> ["python", "linux", "git"]
 
 
 # 定义函数，确保不修改传入的原列表。
+def normalize_and_deduplicate(skills):
+    normal_skills = []
+    for skill in skills:
+        if skill.strip().lower() != '' and skill.strip().lower() not in normal_skills:
+            normal_skills.append(skill.strip().lower())
+    return normal_skills
+
 
 
 # 覆盖普通、重复、空列表、空字符串和原列表未改变测试。
-
+assert normalize_and_deduplicate(["Python", "PYTHON", " Git "]) == ["python", "git"]
+assert normalize_and_deduplicate([]) == []
+assert normalize_and_deduplicate(["", "   "]) == []
+assert normalize_and_deduplicate([" Linux "]) == ["linux"]
