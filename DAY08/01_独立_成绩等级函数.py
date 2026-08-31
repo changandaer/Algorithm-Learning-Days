@@ -26,7 +26,7 @@ def get_grade(score):
             return "D"
 
 # 在这里编写至少六个 assert，再调用一次并打印返回结果。
-score_level = get_grade(101)
+score_level = get_grade(95)
 print(score_level)
 
 assert get_grade(90) == "A"
