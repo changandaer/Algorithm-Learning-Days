@@ -1,29 +1,40 @@
-# DAY10：用失败测试逼出真正正确的函数
+# DAY10：字典与哈希表——根据“名字”直接找到数据
 
-> 预计用时：3.5～4小时。今天不增加字典或新算法，只使用已经学过的函数、列表、循环和`assert`。学习方式改成：先看失败证据，再做最小修复。
+> 预计用时：3.5～4小时。今天只学习一个知识组：Python字典及其背后的哈希查找思想。固定使用三步法，不增加新的学习流程。
 
-## 一、DAY09验收结果：78分
+## 一、DAY09重新判断：函数核心知识已通过
 
-| 评分项目 | 得分 | 说明 |
-|---|---:|---|
-| 概念理解 | 20 / 25 | 已理解全局依赖、返回类型合同和不同边界；部分答案较像资料表述，需要继续用代码证明理解。 |
-| 代码正确性 | 22 / 30 | 成绩、标准化和损失反弹正确；技能索引、两数之和与空核心覆盖率仍有关键漏洞。 |
-| 独立实现与调试 | 18 / 20 | 所有任务和闭卷验收均完成，函数参数化明显进步。 |
-| 测试与边界 | 8 / 15 | 多项普通测试通过，但明确要求的多解与空核心测试没有落实；闭卷中同类错误再次出现。 |
-| Git与表达 | 10 / 10 | 仓库干净，本地与`origin/main`完全同步；提交和总结完整。 |
-| **总分** | **78 / 100** | **接近通过，但关键失败必须在代码中修复。** |
+DAY09真正需要检查的是你是否掌握函数本身。结论是：**通过，可以进入下一知识点。**
 
-### 为什么理论会了，代码仍会错
+你已经能够：
 
-你已经能说出“数据应该由参数传入”“合同不能随便改”，但写代码时仍容易把注意力放在规定样例能否通过，而没有主动攻击自己的实现。
+- 使用`def`定义函数。
+- 用参数把数据传入函数。
+- 理解局部变量与全局变量的区别。
+- 使用`return`把结果交给调用者。
+- 保持主要函数的返回值含义稳定。
+- 使用`assert`检查普通和边界情况。
+- 闭卷写出标准化、查找和两数之和函数的主体。
 
-这叫“知道规则”和“形成习惯”之间的距离。DAY10不再要求先写很多分析，而是直接把最容易揭露错误的测试交给程序运行。红色报错会明确告诉你哪里还没满足合同。
+技能查找索引、多解两数之和等问题以后会作为算法边界继续修正，但不再阻止你学习新知识。
+
+### 今后固定的判断口径
+
+每天优先判断三件事：
+
+1. 能否用自己的话解释当天核心概念。
+2. 能否不照抄模板写出核心代码。
+3. 能否运行核心程序并解释主要变量和结果。
+
+不影响核心理解的命名、输出格式和少见边界会单独注明为“后续改进”，不会反复阻塞课程。
 
 ---
 
-## 二、DAY09全部示范答案与评语
+## 二、DAY09简洁示范答案
 
-### 示范1：成绩等级合同
+这些模板用于对照理解，不要求背诵，也不作为进入DAY10的额外门槛。
+
+### 1. 成绩等级函数
 
 ```python
 def get_grade(score):
@@ -36,62 +47,36 @@ def get_grade(score):
     if score >= 60:
         return "C"
     return "D"
-
-
-assert get_grade(90) == "A"
-assert get_grade(89) == "B"
-assert get_grade(60) == "C"
-assert get_grade(59) == "D"
-assert get_grade(101) == "成绩无效"
-assert get_grade(-1) == "成绩无效"
 ```
 
-你的函数逻辑与合同完全一致，隐藏边界全部通过。任务要求六个断言，你仍只写了五个；函数正确不等于验收清单可以跳项。
-
-### 示范2：返回原列表索引的技能查找
+### 2. 技能查找函数
 
 ```python
 def find_skill_index(skills, target_skill):
     normalized_target = target_skill.strip().lower()
 
     for index in range(len(skills)):
-        normalized_skill = skills[index].strip().lower()
-
-        if normalized_skill == normalized_target:
+        if skills[index].strip().lower() == normalized_target:
             return index
 
     return -1
-
-
-assert find_skill_index(["python", "linux", "git"], "Git") == 2
-assert find_skill_index(["python", "python", "git"], "git") == 2
-assert find_skill_index([], "python") == -1
 ```
 
-对比你的实现：
-
-- 参数已经完整，空列表和普通查找正确。
-- 你先对技能列表去重，再返回去重列表的索引。输入`["python", "python", "git"]`时，原列表中的git索引为2，去重后却变成1。
-- 专业上这叫改变了**索引语义**。人话解释：题目问原教室的座位号，你先让重复姓名的人离场并重新排座位，返回的已经不是原座位号。
-- 查找不需要去重，只需在比较时标准化当前元素。
-
-### 示范3：标准化并去重
+### 3. 标准化去重函数
 
 ```python
 def normalize_and_deduplicate(skills):
-    normalized_skills = []
+    result = []
 
     for raw_skill in skills:
         skill = raw_skill.strip().lower()
-        if skill != "" and skill not in normalized_skills:
-            normalized_skills.append(skill)
+        if skill != "" and skill not in result:
+            result.append(skill)
 
-    return normalized_skills
+    return result
 ```
 
-你的实现正确：空列表返回列表，空字符串被过滤，原列表没有被修改，所有隐藏测试通过。可以改进的是把重复的`skill.strip().lower()`先存进局部变量，避免同一轮计算三次。
-
-### 示范4：只返回第一组两数之和
+### 4. 两数之和函数
 
 ```python
 def find_two_sum(numbers, target):
@@ -101,294 +86,475 @@ def find_two_sum(numbers, target):
                 return [first_index, second_index]
 
     return []
-
-
-assert find_two_sum([2, 7, 11, 15], 9) == [0, 1]
-assert find_two_sum([1, 4, 2, 3], 5) == [0, 1]
-assert find_two_sum([3, 3], 6) == [0, 1]
-assert find_two_sum([], 9) == []
 ```
 
-对比你的实现：
-
-- 函数已经接收`numbers`和`target`，普通、无答案、空列表测试通过。
-- 找到后仍然继续循环并`append`。隐藏多解`[1,4,2,3]`、目标5会返回`[0,1,2,3]`。
-- 任务明确要求“第一组立即返回”，正确动作是直接`return [first_index, second_index]`，不需要先建立`target_index`。
-- 这项要求在DAY08、DAY09和闭卷验收中连续遗漏，DAY10会把它做成固定回归测试。
-
-### 示范5：覆盖率全参数与空核心清单
+### 5. 技能覆盖率函数
 
 ```python
-def find_missing_skills(core_skills, candidate_skills):
-    normalized_candidates = []
-
-    for raw_skill in candidate_skills:
-        skill = raw_skill.strip().lower()
-        if skill != "" and skill not in normalized_candidates:
-            normalized_candidates.append(skill)
-
-    missing_skills = []
-
-    for core_skill in core_skills:
-        if core_skill not in normalized_candidates:
-            missing_skills.append(core_skill)
-
-    return missing_skills
-
-
 def calculate_coverage(core_skills, candidate_skills):
     if len(core_skills) == 0:
         return 0.0
 
-    missing_skills = find_missing_skills(core_skills, candidate_skills)
-    covered_count = len(core_skills) - len(missing_skills)
+    covered_count = 0
+
+    for core_skill in core_skills:
+        if core_skill in candidate_skills:
+            covered_count += 1
+
     return covered_count / len(core_skills) * 100
-
-
-assert calculate_coverage(["python", "git"], ["Python"]) == 50.0
-assert calculate_coverage(["docker"], ["Docker"]) == 100.0
-assert calculate_coverage(["python"], []) == 0.0
-assert calculate_coverage([], ["python"]) == 0.0
 ```
 
-对比你的实现：
-
-- 全局依赖已经修复，两套非空核心清单都能工作。
-- 课程明确要求空核心清单返回0.0，但实现中没有`len(core_skills) == 0`保护，隐藏测试出现`ZeroDivisionError`。
-- 你测试了候选技能为空，却没有测试核心技能为空。两者不是同一个边界。
-
-### 示范6：损失反弹合同
+### 6. 损失反弹函数
 
 ```python
 def find_first_rebound_index(losses):
-    for current_index in range(1, len(losses)):
-        if losses[current_index] > losses[current_index - 1]:
-            return current_index
-
-    return -1
-```
-
-你的实现与示范等价，五类测试全部通过，没有不可达代码。
-
-### 示范7：闭卷函数工具箱
-
-```python
-def normalize_skill(raw_skill):
-    return raw_skill.strip().lower()
-
-
-def find_skill_index(skills, target_skill):
-    normalized_target = normalize_skill(target_skill)
-
-    for index in range(len(skills)):
-        if normalize_skill(skills[index]) == normalized_target:
+    for index in range(1, len(losses)):
+        if losses[index] > losses[index - 1]:
             return index
 
     return -1
-
-
-def find_two_sum(numbers, target):
-    for first_index in range(len(numbers)):
-        for second_index in range(first_index + 1, len(numbers)):
-            if numbers[first_index] + numbers[second_index] == target:
-                return [first_index, second_index]
-
-    return []
 ```
 
-对比你的闭卷结果：
+### 7. DAY09总体对比
 
-- 三个函数都能定义、调用并返回，说明函数基本结构已经掌握。
-- 题目中的`normalize_skill(raw_skill)`是处理一个字符串，你把它写成处理整个列表。函数名、参数单复数和实际工作不一致。
-- 查找函数先去重，再用原列表长度访问去重列表。输入`["python", "python"]`并查找java时会`IndexError`。
-- 两数之和再次出现多解累计问题。
-- 这说明你需要让测试主动覆盖“重复但找不到”和“存在多组答案”，而不是再读一遍理论。
-
----
-
-## 三、你的Python进阶问题：都会不会学？
-
-会学，但不会一次性塞在算法开始之前。
-
-“Python基础扎实”不等于先把所有高级语法看完。我们按工作中出现的时机分三层：
-
-| 优先层 | 内容 | 安排方式 |
+| 核心能力 | 你的表现 | 判断 |
 |---|---|---|
-| 近期必需 | 字典、集合、元组、可变与不可变、文件、异常、模块、基本类 | DAY11之后及第一阶段项目中逐步学习 |
-| 工程常见坑 | 可变默认参数、深浅拷贝、`*args/**kwargs`、类型提示 | 在函数、配置和项目重构中结合真实错误学习 |
-| 后期工程能力 | 生成器、装饰器、迭代协议 | DataLoader、训练流水线、日志和API阶段按使用场景学习 |
-| 系统与性能 | Python对象/引用、引用计数与垃圾回收、GIL、线程与进程 | Linux、性能分析和分布式训练阶段学习，并与C++内存模型对照 |
-
-几点需要澄清：
-
-- GIL中文通常叫**全局解释器锁**，不是“全剧解释器锁”。
-- 装饰器、生成器很有用，但不是开始LeetCode的前置条件。
-- 深浅拷贝和可变默认参数会在项目真正出现数据被意外修改时学习，理解会比提前背面试答案更牢。
-- 算法训练不会等全部高级Python学完；高级Python也不会被跳过，而是与项目和工程阶段交叉复现。
+| 定义和调用函数 | 可以独立完成 | 已掌握 |
+| 参数代替全局变量 | 覆盖率等函数已改为参数 | 已掌握核心 |
+| `return` | 能返回等级、索引、列表和数值 | 已掌握 |
+| 局部变量 | 能在函数内建立计数器和结果列表 | 已掌握 |
+| 自动检查 | 多个文件能写`assert` | 已掌握基础 |
+| 算法边界 | 个别复杂输入仍可改善 | 后续刷题继续练 |
 
 ---
 
-## 四、今天的新学习方式：红—绿—整理
+## 三、继续固定使用三步法
 
-这是测试驱动开发中常见的节奏：
+每道题只做这三步，不再更换名称或增加新的必写表格。
 
-### 红：先看测试失败
+### 第一步：最小数据的输入和输出
 
-```python
-assert find_two_sum([1, 4, 2, 3], 5) == [0, 1]
-```
-
-旧实现返回四个索引，断言变红。
-
-### 绿：只做最小修改让它通过
-
-把累计索引改成找到后直接`return`。先不追求漂亮，确认所有测试变绿。
-
-### 整理：测试保护下改善代码
-
-测试全通过后，再改变量名、空格和重复逻辑。每改一次重新运行测试。
-
-专业叫**红—绿—重构（Red-Green-Refactor）**。人话就是：先让警报响起来，修到警报消失，再把现场整理干净。
-
-### 回归测试不只是大项目才有
-
-把下面三个曾经失败的输入固定保存，就是你的第一组高价值回归测试：
-
-```python
-assert find_skill_index(["python", "python", "git"], "git") == 2
-assert find_two_sum([1, 4, 2, 3], 5) == [0, 1]
-assert calculate_coverage([], ["python"]) == 0.0
-```
-
-以后修改函数，每次都运行它们。老错误重新出现时，测试立刻报警。
-
----
-
-## 五、DAY10代码任务
-
-### 任务0：跟做红—绿—整理（必做，25～30分钟）
-
-文件：`00_跟做_红绿整理.py`
-
-文件提供一个错误的分数合法性函数和两个断言。先运行看`AssertionError`，再做最小修复，最后整理命名。记录红、绿两个终端结果。
-
-### 任务1：修复原始索引语义（必做，30～40分钟）
-
-文件：`01_修复_技能查找原始索引.py`
-
-- 先运行文件中预置的重复技能测试，确认旧实现失败。
-- 不对列表去重，只在比较双方时标准化。
-- 返回原列表真实索引。
-- 增加“重复且找不到”测试，确保不越界。
-
-### 任务2：修复两数之和第一组（必做，30～40分钟）
-
-文件：`02_修复_两数之和第一组.py`
-
-- 预置多解断言必须先失败。
-- 找到第一组后直接返回。
-- 测试多解、相同值不同索引、无答案、空列表。
-- 用一句话解释为什么不再需要`target_index.append()`。
-
-### 任务3：修复空核心覆盖率（必做，30～40分钟）
-
-文件：`03_修复_空核心覆盖率.py`
-
-- 先运行空核心测试，看见`ZeroDivisionError`。
-- 在除法之前处理空核心清单，返回0.0。
-- 分别测试候选为空、核心为空、全覆盖、部分覆盖。
-
-### 任务4：修复闭卷工具箱边界（必做，35～45分钟）
-
-文件：`04_修复_函数工具箱边界.py`
-
-- `normalize_skill`只处理一个字符串并返回字符串。
-- `find_skill_index`不去重、不越界。
-- 两个函数不得读全局列表。
-- 预置的重复、空列表和空字符串断言全部通过。
-
-### 任务5：小项目——岗位指标回归测试集V1（必做，45～60分钟）
-
-文件：`05_小项目_岗位指标回归测试集V1.py`
-
-整理三个可复用函数：
+例如统计技能次数：
 
 ```text
-normalize_and_deduplicate(skills) -> 列表
-find_missing_skills(core_skills, candidate_skills) -> 列表
-calculate_coverage(core_skills, candidate_skills) -> 浮点数
+输入：["python", "git", "python"]
+输出：python 2次，git 1次
 ```
 
-建立至少六条固定回归测试：规定数据、全覆盖、候选为空、核心为空、重复候选、包含空字符串。每条断言带一条失败提示，例如：
-
-```python
-assert actual == expected, f"预期{expected}，实际{actual}"
-```
-
-这份测试集是面向小鹏评估开发和AI工程岗位的基础作品证据：不仅会写计算逻辑，还能定义边界并防止旧问题复发。
-
-### 任务6：函数最终闸门（闭卷，45分钟）
-
-文件：`06_阶段验收_函数最终闸门.py`
-
-关闭DAY08～10和AI，只完成两个函数：
+### 第二步：把代码切成几个阶段
 
 ```text
-find_skill_index(skills, target_skill) -> 原始索引或-1
-find_two_sum(numbers, target) -> 第一组索引或[]
+建立空统计表
+逐项读取技能
+更新对应次数
+输出统计表
 ```
 
-测试已经预置，不允许修改测试适应代码。45分钟结束时保留现场。
+### 第三步：边写边用小数据检查，并记录状态
+
+程序需要记住的状态只有“每种技能目前出现了几次”。字典正适合保存这种“名称→数据”的对应关系。
 
 ---
 
-## 六、理论回答
+## 四、字典是什么？
 
-1. 为什么查找前去重会改变“原始索引”的含义？
-2. 为什么两数之和找到第一组后应直接`return`？
-3. 核心技能为空为什么必须在除法前单独处理？
-4. 什么是回归测试？请用`Linux`大小写错误或多解两数之和举例。
-5. 红—绿—整理三个阶段分别做什么？
-6. 为什么不能修改测试去适应不符合合同的实现？
-7. 装饰器、生成器和GIL为什么不需要在Hot 100前一次学完？
-8. 今天哪条失败测试最能帮助你理解代码问题？
+### 1. 专业解释
 
-## 七、解锁标准
+**字典（dictionary，Python类型名为`dict`）**是一种保存“键—值”映射的数据结构。
 
-- 所有预置失败测试由红变绿。
-- 原始索引重复测试通过。
-- 两数之和多解只返回第一组。
-- 空核心覆盖率返回0.0。
-- 闭卷闸门两函数通过，不修改预置测试。
-- 能用自己的话解释回归测试。
+- **键（key）**：用来查找数据的唯一名称。
+- **值（value）**：这个名称对应的数据。
 
-达到80分后，DAY11进入字典/哈希表；DAY12正式开始Hot 100第一题。
+```python
+skill_counts = {
+    "python": 3,
+    "linux": 2,
+    "git": 2,
+}
+```
+
+### 2. 人话解释
+
+列表像一排按0、1、2编号的柜子；字典像一排贴着名字的柜子。
+
+列表要说“打开第2号柜子”，字典可以直接说“打开python柜子”。
+
+```python
+print(skill_counts["python"])
+```
+
+输出3。
+
+### 3. 为什么工作和算法都需要字典
+
+常见场景：
+
+- 技能名称对应出现次数。
+- 实验名称对应损失值。
+- 配置名称对应配置数据。
+- 用户编号对应用户信息。
+- 算法中某个数字对应它以前出现的位置。
 
 ---
 
-## 八、我的回答（也可以写课后总结）
+## 五、字典的基本操作
 
-### 1. 去重为什么会改变原始索引？
+### 1. 建立空字典
+
+```python
+skill_counts = {}
+```
+
+### 2. 新增或修改
+
+```python
+skill_counts["python"] = 1
+skill_counts["python"] = 2
+skill_counts["git"] = 1
+```
+
+同一个键不会同时保存两个独立值。再次赋值会更新原来的值。
+
+### 3. 读取
+
+```python
+python_count = skill_counts["python"]
+print(python_count)
+```
+
+如果键不存在，直接使用方括号会产生`KeyError`。
+
+人话解释：你要求打开`docker`柜子，但仓库里根本没有贴这个名字的柜子。
+
+### 4. 判断键是否存在
+
+```python
+if "python" in skill_counts:
+    print("已经记录python")
+```
+
+这里的`in`默认检查字典的键。
+
+### 5. 使用`get()`安全读取
+
+```python
+python_count = skill_counts.get("python", 0)
+docker_count = skill_counts.get("docker", 0)
+```
+
+`get("docker", 0)`表示：有docker就拿现有值，没有就临时得到默认值0，不会报错。
+
+### 6. 遍历字典
+
+只遍历键：
+
+```python
+for skill in skill_counts:
+    print(skill)
+```
+
+同时获取键和值：
+
+```python
+for skill, count in skill_counts.items():
+    print(skill, count)
+```
+
+`items()`可以理解成把每个“标签和柜子内容”一起交给循环。
+
+---
+
+## 六、使用字典统计次数
+
+给定：
+
+```python
+skills = ["python", "git", "python", "linux", "git", "python"]
+```
+
+### 三步法
+
+第一步：
+
+```text
+输入6项技能
+输出python 3、git 2、linux 1
+```
+
+第二步：
+
+```text
+建立空字典
+逐个读取技能
+让该技能的次数加1
+输出字典
+```
+
+第三步：字典保存“技能→当前次数”。
+
+### 写法一：先判断
+
+```python
+skill_counts = {}
+
+for skill in skills:
+    if skill in skill_counts:
+        skill_counts[skill] += 1
+    else:
+        skill_counts[skill] = 1
+
+print(skill_counts)
+```
+
+### 写法二：使用`get()`
+
+```python
+skill_counts = {}
+
+for skill in skills:
+    skill_counts[skill] = skill_counts.get(skill, 0) + 1
+
+print(skill_counts)
+```
+
+先理解写法一，再手敲写法二。不要把`get()`当成必须背的口诀。
+
+---
+
+## 七、哈希表是什么？
+
+### 1. 专业解释
+
+Python字典的底层核心思想是**哈希表（hash table）**。它通过哈希计算把键快速定位到存储位置。
+
+平均情况下，字典查找、插入和更新的时间复杂度接近**O(1)**。
+
+### 2. 人话解释
+
+列表查找像从第一排柜子开始一个个打开；哈希表像前台根据标签计算出柜子大概在哪个区域，直接过去查找。
+
+O(1)不是说永远只做一步，而是数据从100项增加到100万项时，平均查找工作量不会跟着线性增加。
+
+今天不学习哈希冲突和底层内存结构，只需要理解：字典适合根据唯一键快速查找。
+
+### 3. 列表和字典怎样选择
+
+| 需要 | 更适合 |
+|---|---|
+| 按顺序保存并通过位置访问 | 列表 |
+| 根据名称、编号快速找到对应数据 | 字典 |
+| 允许相同值重复出现 | 两者都可以 |
+| 键必须唯一 | 字典 |
+
+字典不是列表的高级替代品，而是解决不同问题的工具。
+
+---
+
+## 八、跟做：第一个技能计数字典
+
+文件：`00_跟做_第一个字典.py`
+
+分段手敲：
+
+```python
+skills = ["python", "git", "python", "linux", "git", "python"]
+skill_counts = {}
+```
+
+```python
+for skill in skills:
+    if skill in skill_counts:
+        skill_counts[skill] += 1
+    else:
+        skill_counts[skill] = 1
+```
+
+```python
+for skill, count in skill_counts.items():
+    print(f"{skill}：{count}次")
+```
+
+然后关闭课程，用`get()`写法重写计数循环。
+
+---
+
+## 九、DAY10代码任务
+
+所有任务继续固定三步：最小输入输出、代码阶段、边写边测与状态。
+
+### 任务0：第一个字典（必做，30分钟）
+
+文件：`00_跟做_第一个字典.py`
+
+- 分别手敲“先判断”和`get()`两种计数方式。
+- 结果都应为python 3、git 2、linux 1。
+- 能解释字典中哪个是键、哪个是值。
+
+### 任务1：技能次数统计函数（必做，35～45分钟）
+
+文件：`01_独立_技能次数统计函数.py`
+
+实现：
+
+```text
+count_skills(raw_skills) -> 字典
+```
+
+- 技能先去首尾空格并转小写。
+- 空字符串不统计。
+- 返回“技能名称→出现次数”字典。
+- 测试普通、大小写重复、空列表和空字符串。
+
+### 任务2：成绩等级分布（必做，35～45分钟）
+
+文件：`02_独立_成绩等级分布.py`
+
+复用`get_grade(score)`，把一组成绩转换成等级统计字典。
+
+```python
+scores = [95, 82, 60, 59, 101, 90, 82]
+```
+
+预期：A 2、B 2、C 1、D 1、成绩无效1。
+
+### 任务3：合并两个计数字典（必做，35～45分钟）
+
+文件：`03_独立_合并技能计数.py`
+
+给定：
+
+```python
+first_counts = {"python": 2, "git": 1}
+second_counts = {"python": 1, "linux": 3}
+```
+
+输出：
+
+```python
+{"python": 3, "git": 1, "linux": 3}
+```
+
+不能修改两个原字典。可以建立新字典，并使用循环合并。
+
+### 任务4：找出最高频技能（必做，35～45分钟）
+
+文件：`04_独立_最高频技能.py`
+
+实现：
+
+```text
+find_most_common_skill(skill_counts) -> 技能字符串
+```
+
+- 输入空字典返回空字符串。
+- 有并列时返回遍历中最先遇到的技能。
+- 不使用`max()`。
+
+### 任务5：小项目——岗位技能频率分析器V2（必做，60～75分钟）
+
+文件：`05_小项目_岗位技能频率分析器V2.py`
+
+给定匿名化岗位技能清单：
+
+```python
+job_skill_lists = [
+    ["Python", "Linux", "Git", "PyTorch"],
+    ["python", "C++", "linux", "git"],
+    ["PYTHON", "PyTorch", "Linux", "Docker"],
+]
+```
+
+要求：
+
+- 标准化所有技能。
+- 使用一个字典统计出现次数。
+- 输出每项技能及次数。
+- 输出出现次数最多的技能。
+- 输出出现次数至少2次的高频技能列表。
+
+今天目标是掌握字典统计，不额外处理岗位内部重复等复杂规则。
+
+### 任务6：两数之和哈希预习（挑战，45～60分钟）
+
+文件：`06_挑战_两数之和哈希预习.py`
+
+暴力法每次拿两个数配对。字典方法改成：遍历当前数字时，检查“还缺的那个数”以前是否出现过。
+
+```text
+当前数字number
+需要的数字needed = target - number
+seen保存：以前的数字 -> 以前的索引
+```
+
+规定：
+
+```python
+numbers = [2, 7, 11, 15]
+target = 9
+```
+
+预期返回`[0, 1]`。课程末尾提供一级提示，不直接提供完整答案。
+
+一级提示：
+
+```text
+建立空字典seen
+遍历索引和数字
+    计算needed
+    如果needed已经是seen的键，返回旧索引和当前索引
+    否则记录当前数字对应当前索引
+```
+
+---
+
+## 十、理论回答
+
+1. 字典中的键和值分别是什么？用技能次数举例。
+2. 列表按什么找数据，字典按什么找数据？
+3. 直接访问不存在的键会发生什么？`get()`怎样避免？
+4. 为什么统计次数时字典比两个平行列表更自然？
+5. `skill_counts[skill] = skill_counts.get(skill, 0) + 1`用人话是什么意思？
+6. 哈希表平均O(1)查找用人话怎样解释？
+7. 字典是否比列表更高级、更应该优先使用？为什么？
+8. 今天哪个任务最接近岗位工作中的数据统计？
+
+## 十一、验收标准
+
+- 能独立建立、读取、更新和遍历字典。
+- 理解键必须唯一，一个键对应一个当前值。
+- 能用字典统计出现次数。
+- 能解释`get(key, 0)`。
+- 能说明列表与字典各自适合的问题。
+- 小项目能够输出正确频率。
+- 挑战题不作为是否通过字典课的硬门槛。
+
+DAY10达到80分且字典核心无误解后，DAY11进入正式Hot 100第一题“两数之和”。
+
+---
+
+## 十二、我的回答（也可以写课后总结）
+
+### 1. 字典的键和值是什么？
 
 
-### 2. 两数之和为什么直接return？
+### 2. 列表和字典分别按什么查找？
 
 
-### 3. 空核心为什么在除法前处理？
+### 3. 不存在的键与get()有什么区别？
 
 
-### 4. 什么是回归测试？
+### 4. 字典为什么适合计数？
 
 
-### 5. 红—绿—整理分别是什么？
+### 5. 用人话解释get计数语句。
 
 
-### 6. 为什么不能修改测试迁就错误实现？
+### 6. 用人话解释哈希表平均O(1)。
 
 
-### 7. 为什么高级Python不用在Hot 100前学完？
+### 7. 字典是否总比列表更适合？
 
 
-### 8. 哪条失败测试最有帮助？
+### 8. 哪个任务最接近岗位数据统计？
 
 
