@@ -16,6 +16,7 @@ def two_sum_brute_force(nums, target):
     for index in range(len(nums)):
         needed = target - nums[index]
         if needed in seen:
+            # if needed in seen难道不也是一种特殊的for循环检索吗，检索seen这个字典中是否存在needed这个key，为什么这个时间复杂度就低呢？
             return [seen[needed],index]
         seen[nums[index]] = index
     return []

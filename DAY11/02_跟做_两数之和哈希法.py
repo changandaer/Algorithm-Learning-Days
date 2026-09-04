@@ -6,7 +6,8 @@
 
 
 # 函数合同：two_sum_hash(nums, target) -> list
-
+def two_sum_hash(nums, target):
+    
 
 # 第一次运行保留每轮print，理解seen后删除调试输出。
 
