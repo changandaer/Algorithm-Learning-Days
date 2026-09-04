@@ -12,14 +12,13 @@
 
 def two_sum_brute_force(nums, target):
 
-    seen = {}
-    for index in range(len(nums)):
-        needed = target - nums[index]
-        if needed in seen:
-            # if needed in seen难道不也是一种特殊的for循环检索吗，检索seen这个字典中是否存在needed这个key，为什么这个时间复杂度就低呢？
-            return [seen[needed],index]
-        seen[nums[index]] = index
+    for first_index in range(len(nums)):
+        for second_index in range(first_index+1,len(nums)):
+            if nums[first_index] + nums[second_index] == target:
+                return [first_index,second_index]
+    
     return []
+
 
 assert two_sum_brute_force([2,11,15,7],9) == [0,3]
 assert two_sum_brute_force([3,2,4],6) == [1, 2]
