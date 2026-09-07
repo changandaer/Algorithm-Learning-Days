@@ -9,13 +9,19 @@
 
 def contains_duplicate_hash(nums):
     # TODO：关闭课程中的相关答案后，独立完成哈希法。
+    seen = {}
+    for index in range(len(nums)):
+        if nums[index] in seen:
+            return True
+        seen[nums[index]] = index
+    return False 
     pass
 
 
 # 完成函数后取消注释并运行：
-# assert contains_duplicate_hash([1, 2, 3, 1]) is True
-# assert contains_duplicate_hash([1, 2, 3, 4]) is False
-# assert contains_duplicate_hash([1, 1]) is True
-# assert contains_duplicate_hash([1]) is False
-# assert contains_duplicate_hash([]) is False
+assert contains_duplicate_hash([1, 2, 3, 1]) is True
+assert contains_duplicate_hash([1, 2, 3, 4]) is False
+assert contains_duplicate_hash([1, 1]) is True
+assert contains_duplicate_hash([1]) is False
+assert contains_duplicate_hash([]) is False
 
