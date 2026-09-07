@@ -9,13 +9,20 @@
 
 def contains_duplicate_brute_force(nums):
     # TODO：独立完成暴力法。
-    pass
+    
+    for first_index in range(len(nums)):
+        for second_index in range(first_index+1, len(nums)):
+            
+            if nums[first_index] == nums[second_index]:
+                return True
+    return False
+    pass 
 
 
 # 完成函数后取消注释并运行：
-# assert contains_duplicate_brute_force([1, 2, 3, 1]) is True
-# assert contains_duplicate_brute_force([1, 2, 3, 4]) is False
-# assert contains_duplicate_brute_force([1, 1]) is True
-# assert contains_duplicate_brute_force([1]) is False
-# assert contains_duplicate_brute_force([]) is False
+assert contains_duplicate_brute_force([1, 2, 3, 1]) is True
+assert contains_duplicate_brute_force([1, 2, 3, 4]) is False
+assert contains_duplicate_brute_force([1, 1]) is True
+assert contains_duplicate_brute_force([1]) is False
+assert contains_duplicate_brute_force([]) is False
 
