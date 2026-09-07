@@ -9,12 +9,20 @@
 
 def two_sum_hash(nums, target):
     # TODO：从空白手写正确的哈希解法。
+    seen = {}
+    for index in range(len(nums)):
+        needed = target - nums[index]
+        if needed in seen:
+            return [seen[needed],index]
+        seen[nums[index]] = index
+    
+    return []
     pass
 
 
 # 完成函数后取消注释并运行：
-# assert two_sum_hash([2, 7, 11, 15], 9) == [0, 1]
-# assert two_sum_hash([3, 2, 4], 6) == [1, 2]
-# assert two_sum_hash([3, 3], 6) == [0, 1]
-# assert two_sum_hash([3], 6) == []
+assert two_sum_hash([2, 7, 11, 15], 9) == [0, 1]
+assert two_sum_hash([3, 2, 4], 6) == [1, 2]
+assert two_sum_hash([3, 3], 6) == [0, 1]
+assert two_sum_hash([3], 6) == []
 
