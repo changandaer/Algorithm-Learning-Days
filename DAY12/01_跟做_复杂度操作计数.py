@@ -6,6 +6,8 @@ def count_one_loop(n):
     operation_count = 0
 
     # TODO：写一个执行n次的循环，每次把operation_count加1。
+    for i in range(n):
+        operation_count += 1
 
     return operation_count
 
@@ -15,6 +17,9 @@ def count_two_nested_loops(n):
     operation_count = 0
 
     # TODO：写两层都执行n次的循环，在最内层把operation_count加1。
+    for i in range(n):
+        for j in range(n):
+            operation_count += 1
 
     return operation_count
 
