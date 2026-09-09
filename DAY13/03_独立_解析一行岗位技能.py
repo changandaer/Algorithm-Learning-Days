@@ -18,3 +18,6 @@ def parse_skill_line(line):
 
 normal_skills = parse_skill_line(" Python, C++, Linux, Git ")
 print(normal_skills)
+
+
+assert parse_skill_line("PYTHON") == ["python"]
