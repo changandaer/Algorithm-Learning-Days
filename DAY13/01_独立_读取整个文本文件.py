@@ -7,6 +7,12 @@
 
 # 8（8-bit/8位元）：意味着它处理数据的最小基础单位是 8 个比特（即 1 个字节）。
 
-with open("DAY13/岗位技能样例.txt","r",encoding="utf-8") as file:
-    content = file.read()
-print(content)
+
+def read_text(file_path):
+
+    with open(file_path,"r",encoding="utf-8") as file:
+        content = file.read()
+    return content
+
+job_skills = read_text("DAY13/岗位技能样例.txt")
+print(job_skills)
