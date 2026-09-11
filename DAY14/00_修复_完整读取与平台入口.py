@@ -1,28 +1,41 @@
 """DAY14任务0：要求见课程文档。请自己完成三步分析、函数和测试。"""
 
-# 1.输入输出：`[2,7,11,15],9` -> [0,1]
+# 固定三步法：
+# 第一步：最小输入与输出：
+# Python,C++,Linux,Git
+# Python,PyTorch,Linux,Git
 
-# 2.阶段：建立空字典，查看需要数字是否存在字典中，存在就返回，不存在就加入字典
+# [
+#     ["python", "c++", "linux", "git"],
+#     ["python", "pytorch", "linux", "git"],
+# ]
 
-class Solution:
+# 第二步：逐行遍历，独立解析一行，解析完一行就加入到外层空列表中
 
-    def twoSum(self, nums, target):
+def load_job_skills(file_path):
 
-        seen = {}
+    with open(file_path,"r",encoding="utf-8") as file:
 
-        for index in range(len(nums)):
+        job_skills = []
 
-            needed = target - nums[index]
+        for line_file in file:
 
-            if needed in seen:
+            clean_line = line_file.strip()
+            split_line = clean_line.split(',')
 
-                return [seen[needed],index]
-            
-            seen[nums[index]] = index
-        return []
+            normal_skills = []
 
-solution = Solution()
+            for skill in split_line:
+                normal_skill = skill.strip().lower()
+                normal_skills.append(normal_skill)
 
-assert solution.twoSum([2,7,11,15],9) == [0,1]
-assert solution.twoSum([3,3],6) == [0,1]
-assert solution.twoSum([3],6) == []
+            if normal_skills != ['']:
+
+                job_skills.append(normal_skills)
+
+    return job_skills   
+
+
+skills = load_job_skills("DAY13/岗位技能样例.txt")
+print(skills)
+
