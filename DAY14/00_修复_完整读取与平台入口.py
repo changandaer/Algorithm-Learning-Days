@@ -39,3 +39,12 @@ def load_job_skills(file_path):
 skills = load_job_skills("DAY13/岗位技能样例.txt")
 print(skills)
 
+skills_A = load_job_skills("DAY14/岗位样例A_三条岗位.txt")
+print(skills_A)
+
+skills_B = load_job_skills("DAY14/岗位样例B_一条岗位.txt")
+print(skills_B)
+
+skills_C = load_job_skills("DAY14/岗位样例C_仅空白行.txt")
+print(skills_C)
+
