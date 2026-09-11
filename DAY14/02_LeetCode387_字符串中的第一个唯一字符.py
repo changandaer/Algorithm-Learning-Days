@@ -33,4 +33,5 @@ assert solution.firstUniqChar("aabb") == -1
 assert solution.firstUniqChar("") == -1
 assert solution.firstUniqChar("z") == 0
 
-
+# 时间复杂度是 O(len(s))，输入字符串越长，时间复杂度越高，也就是O(n)
+# 额外空间复杂度是两个字典的长度，输入字符越长，种类越多，额外空间复杂度也越高，也是O(n)
