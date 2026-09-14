@@ -19,6 +19,8 @@ int main(){
     len_vector = empty_values.size();
     std::cout << len_vector << "\n";
     // std::cout << empty_values[0] << "\n";
+    int is_empty = empty_values.empty();
+    std::cout << is_empty << "\n";
     assert(empty_values[0] == 0);
 
     std::vector<int> count_times{15,25,10};
