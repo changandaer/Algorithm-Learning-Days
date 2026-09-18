@@ -1,17 +1,33 @@
 """DAY20新题：反转字符串，原地修改字符列表；要求见课程，自己写三步分析、实现和测试。"""
 
-def rebind(items):
-    items = ["new"]
+# 1.输入输出 [1,2,3] -> [3,2,1]
+class Solution:
 
+    def reverseString(self, s):
 
-def replace_first(items):
-    items[0] = "new"
+        len_s = len(s)
+        i = 0
+        j = len_s-1
 
+        while i < j:
 
-values = ["old", "keep"]
-# rebind(values)
-values = ["new"]
-assert values == ["old", "keep"]
-replace_first(values)
-assert values == ["new", "keep"]
+            # a = s[i]
+            # b = s[j]
+            # c = a
+            # s[i] = b
+            # s[j] = c
+            s[i],s[j] = s[j],s[i]
+
+            i += 1
+            j -= 1
+        
+        return s
+
+solution = Solution()
+s = solution.reverseString(["c", "o", "d", "e"])
+print(s)
+
+assert solution.reverseString(["a", "b", "c", "d", "e"]) == ["e", "d", "c", "b", "a"]
+assert solution.reverseString(["a", "a", "b"]) == ["b", "a", "a"]
+assert solution.reverseString(["a"]) == ["a"]
 
