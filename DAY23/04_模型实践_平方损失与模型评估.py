@@ -38,7 +38,7 @@ class RegressionDataset:
     
     def get_item(self,index):
 
-        reurn(xs[index],ys[index])
+        return (xs[index],ys[index])
 
 class SquaredLoss:
     
