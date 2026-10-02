@@ -39,7 +39,7 @@ class SquaredLoss:
             loss = self.forward(predictions[i],targets[i])
             total += loss
 
-            return total/len(predictions)
+        return total/len(predictions)
 
 
 class LossEvaluator:
