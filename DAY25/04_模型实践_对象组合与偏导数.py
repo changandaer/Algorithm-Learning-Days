@@ -38,5 +38,52 @@ class LossEvaluator:
             predictions.append(single_prediction)
         mse_loss = self.loss.mean(predictions,self.data.ys)
     
-    return mse_loss
+        return mse_loss
 
+dataset_1 = RegressionDataset([0,2],[1,5])
+loss = SquaredLoss()
+neuron_1_0 = LinearNeuron(1,0)
+neuron_2_1 = LinearNeuron(2,1)
+loss_evaluate_1 = LossEvaluator(dataset_1,loss)
+loss_1_0 = loss_evaluate_1.evaluate(neuron_1_0)
+print(loss_1_0)
+loss_2_1 = loss_evaluate_1.evaluate(neuron_2_1)
+print(loss_2_1)
+loss_1_0 = loss_evaluate_1.evaluate(neuron_1_0)
+print(loss_1_0)
+
+loss_mean = loss.mean([0,0],[1,3])
+print(loss_mean)
+
+dataset_2 = RegressionDataset([2],[5])
+loss_evaluate_2 = LossEvaluator(dataset_2,loss)
+
+data = RegressionDataset([-1, 0, 1, 2], [-1, 1, 3, 5])
+evaluator = LossEvaluator(data, loss)
+base = LinearNeuron(1, 0)
+base_loss = evaluator.evaluate(base)
+assert base_loss == 1.75
+assert evaluator.evaluate(base) == 1.75
+print("基准平均损失：", base_loss)
+
+for h in [0.1, 0.01]:
+    weight_trial = LinearNeuron(base.weight + h, base.bias)
+    weight_loss = evaluator.evaluate(weight_trial)
+    weight_rate = (weight_loss - base_loss) / h
+
+    bias_trial = LinearNeuron(base.weight, base.bias + h)
+    bias_loss = evaluator.evaluate(bias_trial)
+    bias_rate = (bias_loss - base_loss) / h
+
+    assert abs(weight_loss - (1.75 - 2 * h + 0.75 * h * h)) < 0.000001
+    assert abs(bias_loss - (1.75 - 1.5 * h + 0.5 * h * h)) < 0.000001
+    assert abs(weight_rate - (-2 + 0.75 * h)) < 0.000001
+    assert abs(bias_rate - (-1.5 + 0.5 * h)) < 0.000001
+
+    print("只改变w：", h, weight_loss, weight_rate)
+    print("只改变b：", h, bias_loss, bias_rate)
+
+assert base.weight == 1
+assert base.bias == 0
+assert data.xs == [-1, 0, 1, 2]
+assert data.ys == [-1, 1, 3, 5]
