@@ -18,6 +18,7 @@ class Solution:
             if bracket in '([{':
                 brackets.append(bracket)
             else:
+                # 在输入右括号之前必须先判断栈是否不为空，也就是已经有左括号
                 if not brackets:
                     return False
                 if bracket == ')':
@@ -36,7 +37,10 @@ class Solution:
                     else:
                         return False
         # return True 循环走完之后，不能直接 `return True`，必须判断栈为空
-        return len(brackets) == 0
+        # 所以可以使用 return len(brackets) == 0 或者 return not brackets
+        # return len(brackets) == 0
+        # return not brackets
+        return not brackets
 
 solution = Solution()
 assert solution.isValid("()") is True
