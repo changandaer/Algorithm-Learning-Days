@@ -19,6 +19,7 @@ class Solution:
                 brackets.append(bracket)
             else:
                 # 在输入右括号之前必须先判断栈是否不为空，也就是已经有左括号
+                # 如果栈为空，也就是没有左括号，直接输入了右括号，直接返回False
                 if not brackets:
                     return False
                 if bracket == ')':
