@@ -69,4 +69,5 @@ assert solution.maxProfit([3, 6, 1, 2]) == 3
 assert solution.maxProfit([9, 7, 4]) == 0
 assert solution.maxProfit([0, 4]) == 4
 assert solution.maxProfit([2, 4, 1]) == 2
+assert solution.maxProfit([3,2,6,5,0,3]) == 4
 
