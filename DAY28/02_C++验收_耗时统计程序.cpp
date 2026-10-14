@@ -2,47 +2,61 @@
 #include<iostream>
 #include<vector>
 
-int total_duration(std::vector<int> values){
+int total_duration(std::vector<int> durations){
 
     int total = 0;
-    for(int value:values){
+    for(int value:durations){
         total += value;
     }
     return total;
 
 }
 
-int main(){
+std::vector<int> over_limit(std::vector<int> durations, int limit){
 
-    int n,total,limit;
-    std::vector<int> durations;
-
-    int i=0;
-    std::cin>> n;
-    while(i<n){
-        int duration;
-        std::cin>> duration;
-        durations.push_back(duration);
-        i+=1;
-
-    }
-    total = total_duration(durations);
-    std::cout<< total << '\n';
-
-    std::cin>> limit; 
     std::vector<int> exceed_limit;
     int count = 0;
     for(int value:durations){
         if(value>limit){
-            exceed_limit.push_back(value);
             count += 1;
         }
     }
-    std::cout<< count <<'\n';
+    exceed_limit.push_back(count);
 
-    for(int i:exceed_limit){
-        std::cout<< i << '\n';
+    for(int value:durations){
+        if(value>limit){
+            exceed_limit.push_back(value);
+        }
     }
+    return exceed_limit;
+
+}
+
+
+int main(){
+
+    int n,duration,total,limit;
+    int i=0;
+    std::cin>> n;
+    std::vector<int> durations;
+    std::vector<int> exceed_limit;
+    while(i<n){
+        std::cin>> duration;
+        durations.push_back(duration);
+        i++;
+    }
+
+    std::cin>> limit;
+
+    total = total_duration(durations);
+    exceed_limit = over_limit(durations,limit);
+
+    std::cout<< total << '\n';
+
+    for(int duration : exceed_limit){
+        std::cout<< duration << '\n';
+    }
+
 
     return 0;
 }
