@@ -13,10 +13,7 @@ class Solution:
             profit = prices[i] - low_price
             if profit > maxprofit:
                 maxprofit = profit
-        if maxprofit>0:
-            return maxprofit
-        else:
-            return 0
+        return maxprofit
 
 solution = Solution()
 assert solution.maxProfit([8, 2, 6, 1, 5]) == 4
