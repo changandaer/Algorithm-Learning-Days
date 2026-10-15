@@ -419,3 +419,308 @@ print('DAY27模型调用与测试通过')
 - 模型：四类实现已正确，不需要继续按“所有类不会”授课。主要验证实际调用、属性可变与偏导条件；通过后可接回单次参数更新，然后全批量梯度和训练循环，一次接一个部件。
 
 更新器、平均梯度、Trainer/fit、100步训练与未见样本预测仍没有独立完成证据，明确顺延，不为了DAY28结课而虚报。DAY20的Embedding接入网络也保留为待核验，不在今天额外增加第六份作业。下一课是否恢复新题、如何接回训练，以今天成果决定；今天不预生成DAY29。
+
+<a id="day28-review"></a>
+## 七、DAY28验收结果与示范答案（2026-10-15追加）
+
+本节是完成作业后的讲评，上面是原始任务，均保留。下一阶段执行[DAY29—DAY39计划](../DAY29-DAY39_阶段计划.md)，每日约4小时，C++先系统建立语言核心体系，不要求立即刷C++ LeetCode。
+
+### 1. 总评与阶段判断
+
+**可以进入下一阶段，但DAY18—DAY28全部目标尚未完成，无需整阶段返工。** Python二分与股票题正确，C++已能组织函数和容器程序，模型能完成真实评估调用。下一步应增加能力，不再围绕同一套求和代码或四个类重复多天。
+
+| 项目 | 补测结果 | 评语 |
+|---|---|---|
+| 704 | 1,143组升序数组/目标通过 | 闭区间和边界更新正确，O(log n)时间、O(1)额外空间 |
+| 121 | 21,844组价格数组通过 | 先把前一天纳入最低价，再计算今天利润，正确保证先买后卖；O(n)/O(1) |
+| C++02 | 整个程序120组输入输出通过，无编译警告 | 输出正确；筛选函数把数量塞进返回数据，和另一文件同名函数语义不一致 |
+| C++03 | 固定例子的原容器、副本和再次调用结果正确，无编译警告 | 少规定长度行、使用逗号分隔，只需修输出；固定输入保证first非空，不把本例直接判成越界 |
+| 模型04 | 196组参数与数据组合通过；教师另验证同实例修改参数后重新评估 | 四类、配对、损失和评估正确；已补上调用，是真实进步 |
+
+教师补测不能代替你的限时记录。未找到独立《课后总结.md》，已读模型注释里的咖啡机类比；指定偏导手算、B段参数对照与用时还缺提交证据，不直接判定你不会，也不虚构总分。
+
+C++02在main中打印了“总和、数量、数据”，结果完全符合题目；问题仅是把数量编码进over_limit的返回值。其结果用于后续求和、再次筛选或读取size时，首项会被误当耗时。03只返回数据的写法才符合原接口。参考把数量放回输出层计算，不让你重做整个算法。
+
+模型中`neuron_A = LinearNeuron(2,1)`是新建对象并重新绑定名字，数值预测仍正确；原任务要的是在同一个对象上改weight，不重建评估器。这一差别不是所有类都不会，下一课通过参数更新自然补齐。
+
+### 2. 五题完整示范答案
+
+以下代码可分别放入临时文件验证，**不要求覆盖原作业，也不要求全部再抄一遍**。示范保持DAY28已教范围，不提前使用引用、指针或新的模型类。
+
+<details>
+<summary>00｜704：你的实现已正确，示范仅使用较短变量名</summary>
+
+```python
+class Solution:
+    def search(self, nums, target):
+        left = 0
+        right = len(nums) - 1
+        while left <= right:
+            middle = (left + right) // 2
+            if nums[middle] < target:
+                left = middle + 1
+            elif nums[middle] > target:
+                right = middle - 1
+            else:
+                return middle
+        return -1
+
+solver = Solution()
+nums = [-8, -2, 1, 6, 11, 19]
+for target, expected in [(-8, 0), (19, 5), (6, 3), (4, -1)]:
+    assert solver.search(nums, target) == expected
+assert solver.search([7], 7) == 0
+assert solver.search([7], 6) == -1
+assert solver.search([2, 8], 8) == 1
+assert solver.search([2, 8], 3) == -1
+```
+
+你写的`right_index >= left_index`与示范条件等价，不需要修改。左右边界代表仍可能包含目标的闭区间；每次排除中间值及不可能的一侧。你已覆盖首尾和不存在的目标，补单元素、双元素测试即可。
+
+</details>
+
+<details>
+<summary>01｜121：保留你“更新到前一天，再处理今天”的正确逻辑</summary>
+
+```python
+class Solution:
+    def maxProfit(self, prices):
+        lowest = prices[0]
+        best = 0
+        for day in range(1, len(prices)):
+            if prices[day - 1] < lowest:
+                lowest = prices[day - 1]
+            profit = prices[day] - lowest
+            if profit > best:
+                best = profit
+        return best
+
+solver = Solution()
+for prices, expected in [([6, 3, 3, 8, 2, 9], 7),
+                         ([5, 5, 4, 4], 0), ([4], 0),
+                         ([2, 7, 1, 4], 5), ([9, 1, 1, 2], 1),
+                         ([0, 0, 3], 3), ([2, 8, 1], 6)]:
+    assert solver.maxProfit(prices) == expected
+```
+
+这一版与前一天示范的更新位置不同，但等价：计算第day天利润时，lowest覆盖0到day−1天的最低价。你的新版本状态解释比上涨段筛选更直接，不要求改成另一套顺序。最后一天才出现最低价时，不会用它去“回到过去”卖出。
+
+</details>
+
+<details>
+<summary>02｜C++统计：函数只返回筛选数据，main负责数量和格式</summary>
+
+```cpp
+#include <cassert>
+#include <iostream>
+#include <vector>
+
+int total_duration(std::vector<int> durations) {
+    int total = 0;
+    for (int value : durations) {
+        total += value;
+    }
+    return total;
+}
+
+std::vector<int> over_limit(std::vector<int> durations, int limit) {
+    std::vector<int> result;
+    for (int value : durations) {
+        if (value > limit) {
+            result.push_back(value);
+        }
+    }
+    return result;
+}
+
+int main() {
+    assert(total_duration({}) == 0);
+    assert(total_duration({4, 10, 0, 7, 10}) == 31);
+    assert(over_limit({}, 7).empty());
+    assert(over_limit({7, 7}, 7).empty());
+    std::vector<int> test = over_limit({4, 10, 0, 7, 10}, 7);
+    assert(test.size() == 2);
+    assert(test[0] == 10 && test[1] == 10);
+
+    int n;
+    std::cin >> n;
+    std::vector<int> durations;
+    for (int i = 0; i < n; i++) {
+        int value;
+        std::cin >> value;
+        durations.push_back(value);
+    }
+    int limit;
+    std::cin >> limit;
+    std::vector<int> filtered = over_limit(durations, limit);
+    std::cout << total_duration(durations) << '\n';
+    std::cout << filtered.size() << '\n';
+    for (int value : filtered) {
+        std::cout << value << '\n';
+    }
+    return 0;
+}
+```
+
+合法输入前提与原题一致。`5 4 10 0 7 10 7`输出31、2、10、10，各一行；`0 7`输出两行0；`3 7 7 7 7`输出21、0；`2 8 9 7`输出17、2、8、9。断言成功不产生额外输出。
+
+相比你的代码，筛选只遍历一次，也不把数量混入数据；你的两次遍历仍是O(n)，不是复杂度级别错误。这次修改的主要价值是接口稳定，而非少一轮循环就叫“算法升级”。
+
+</details>
+
+<details>
+<summary>03｜C++副本：保留正确结果，补长度与统一分隔</summary>
+
+```cpp
+#include <cassert>
+#include <iostream>
+#include <vector>
+
+std::vector<int> over_limit(std::vector<int> durations, int limit) {
+    std::vector<int> result;
+    for (int value : durations) {
+        if (value > limit) {
+            result.push_back(value);
+        }
+    }
+    return result;
+}
+
+int main() {
+    std::vector<int> original = {2, 9, 4};
+    std::vector<int> first = over_limit(original, 5);
+    std::vector<int> second = over_limit(original, 10);
+    if (!first.empty()) {
+        first[0] = 99;
+    }
+    std::vector<int> third = over_limit(original, 5);
+    assert(original[0] == 2 && original[1] == 9 && original[2] == 4);
+    assert(first.size() == 1 && first[0] == 99);
+    assert(second.empty());
+    assert(third.size() == 1 && third[0] == 9);
+
+    std::cout << original.size() << '\n';
+    for (int value : original) {
+        std::cout << value << '\n';
+    }
+    std::cout << first.size() << '\n';
+    for (int value : first) {
+        std::cout << value << '\n';
+    }
+    std::cout << second.size() << '\n';
+    for (int value : second) {
+        std::cout << value << '\n';
+    }
+    std::cout << third.size() << '\n';
+    for (int value : third) {
+        std::cout << value << '\n';
+    }
+    return 0;
+}
+```
+
+完整输出为3、2、9、4、1、99、0、1、9，各一行。你的数值内容已经正确，不因格式否定副本能力。固定输入下first确实非空；示范保留空判断，便于换输入。若误把original[0]改成99，后续筛选会读到原数据中的99，这是另一件事。
+
+</details>
+
+<details>
+<summary>04｜模型：保留四类，补同实例修改、参数对照与断言</summary>
+
+```python
+class LinearNeuron:
+    def __init__(self, weight, bias):
+        self.weight = weight
+        self.bias = bias
+
+    def forward(self, x):
+        return self.weight * x + self.bias
+
+
+class RegressionDataset:
+    def __init__(self, xs, ys):
+        self.xs = xs
+        self.ys = ys
+
+    def size(self):
+        return len(self.xs)
+
+    def get_item(self, index):
+        return self.xs[index], self.ys[index]
+
+
+class SquaredLoss:
+    def forward(self, prediction, target):
+        return (prediction - target) ** 2 / 2
+
+    def mean(self, predictions, targets):
+        total = 0
+        for i in range(len(predictions)):
+            total += self.forward(predictions[i], targets[i])
+        return total / len(predictions)
+
+
+class LossEvaluator:
+    def __init__(self, data, loss):
+        self.data = data
+        self.loss = loss
+
+    def evaluate(self, model):
+        predictions = []
+        targets = []
+        for i in range(self.data.size()):
+            x, y = self.data.get_item(i)
+            predictions.append(model.forward(x))
+            targets.append(y)
+        return self.loss.mean(predictions, targets)
+
+
+loss = SquaredLoss()
+model_a = LinearNeuron(0, 1)
+model_b = LinearNeuron(2, 1)
+data_a = RegressionDataset([-2, 1, 3], [-3, 3, 7])
+data_b = RegressionDataset([0, 2], [1, 5])
+evaluator_a = LossEvaluator(data_a, loss)
+evaluator_b = LossEvaluator(data_b, loss)
+
+assert data_a.size() == 3
+assert data_b.size() == 2
+assert data_a.get_item(0) == (-2, -3)
+assert abs(evaluator_a.evaluate(model_a) - 28 / 3) < 1e-9
+assert evaluator_a.evaluate(model_b) == 0
+assert evaluator_b.evaluate(model_a) == 4
+
+# 修改原模型属性，不调用构造器，不重建评估器。
+model_a.weight = 2
+assert model_a.bias == 1
+assert evaluator_a.evaluate(model_a) == 0
+assert evaluator_b.evaluate(model_a) == 0
+assert data_a.xs == [-2, 1, 3] and data_a.ys == [-3, 3, 7]
+assert data_b.xs == [0, 2] and data_b.ys == [1, 5]
+
+# B段：同一个评估器、同一个模型，改变参数再比较。
+single_data = RegressionDataset([2], [5])
+single_evaluator = LossEvaluator(single_data, loss)
+probe = LinearNeuron(3, 0)
+assert abs(single_evaluator.evaluate(probe) - 0.5) < 1e-9
+probe.weight = 2.9
+assert abs(single_evaluator.evaluate(probe) - 0.32) < 1e-9
+probe.bias = 0.4
+assert abs(single_evaluator.evaluate(probe) - 0.72) < 1e-9
+print('DAY28模型评估与参数对照通过')
+```
+
+你的evaluate直接使用`self.data.ys`，在当前数据集定义下合法且结果正确。示范取样时一起收集y，是为了让输入与标签都通过同一接口配对，不是要求所有实现必须一样。你返回局部变量loss也合法，不强迫压成一行。拼写predicition不影响当前运行，属于日后整理项，不阻止新课。
+
+你的原脚本输出28/3、0、4、0、0，数值正确；示范补上断言、保留同一对象及B段三组参数的验证。它依然只是评估与手动设参数，不声称已经训练。
+
+</details>
+
+### 3. DAY28理论示范回答
+
+- 实例属性能改变。你的咖啡机类比抓住了“根据结果调节”的意思；更贴近当前模型的是调节机器已有旋钮，而不是每次换一台机器。`model.weight = ...`修改当前对象，`model = LinearNeuron(...)`建立新对象并让名字指向它。
+- evaluate没有return时返回None；Python不会自动把最后一次计算结果交给调用者。`model.forward`是方法，`model.forward(2)`才是一次调用的结果。
+- 手算x=1、y=4、w=2、b=1：预测3、误差−1、半平方损失0.5；对w的偏导为`(w*x+b-y)*x=-1`，固定b、x、y；对b的偏导为`w*x+b-y=-1`，固定w、x、y。
+- x=2、y=5时，(3,0)到(2.9,0)只减小w，损失从0.5降至0.32；再把b改成0.4，损失升为0.72。单个偏导只描述其他自变量固定时的局部变化，同时改变多个参数必须整体考虑。
+- 先在同一旧参数点计算所有偏导，再更新参数；否则后算的偏导已不对应原来的点。梯度给出局部方向，学习率决定步长，不能保证任意大步子都下降。
+
+本次不要求为补这几项重做DAY28。DAY29在真实参数更新中验证同实例修改与偏导；之后完成平均梯度、训练器和100次训练。C++转向函数体系、数组、指针、引用、内存、结构体和类，不把格式问题升级为重复基础课。
