@@ -71,10 +71,10 @@ class Trainer:
         #2.计算平均梯度
         mean_g_w,mean_g_b = batch_gradients(self.model,self.data)
 
-        #3.计算新参数
+        #3.计算新参数并更新模型参数
         self.optimizer.step(self.model,mean_g_w,mean_g_b)
 
-        #4.用新参数计算新损失
+        #4.用更新参数后的模型重新计算新损失
         new_loss = self.evaluator.evaluate(self.model)
 
         return old_loss,new_loss
